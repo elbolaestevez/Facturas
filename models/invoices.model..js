@@ -1,4 +1,5 @@
 const S = require("sequelize");
+const db = require("../db");
 
 class Invoice extends S.Model {}
 
@@ -10,15 +11,25 @@ Invoice.init(
     },
     category: {
       type: S.STRING,
+      allowNull: false,
     },
-    iva: {
-      type: S.NUMBER,
+    type: {
+      type: S.STRING,
+    },
+    ivaAlicuota: {
+      type: S.FLOAT,
+    },
+    montoSinIva: {
+      type: S.FLOAT,
+    },
+    ivaMonto: {
+      type: S.FLOAT,
     },
     detail: {
       type: S.TEXT,
     },
     total: {
-      type: S.STRING,
+      type: S.FLOAT,
     },
   },
   { sequelize: db, modelName: "invoice" }

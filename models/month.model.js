@@ -1,26 +1,28 @@
 const S = require("sequelize");
+const db = require("../db");
 
 class Month extends S.Model {}
 
 Month.init(
   {
     month: {
-      type: S.STRING,
+      type: S.INTEGER,
     },
     creditcardexpenses: {
-      type: S.NUMBER,
+      type: S.FLOAT,
     },
     cashexpenses: {
-      type: S.NUMBER,
+      type: S.FLOAT,
     },
     initialcash: {
-      type: S.NUMBER,
+      type: S.FLOAT,
     },
+
     finalcash: {
-      type: S.NUMBER,
+      type: S.FLOAT,
     },
     bankcash: {
-      type: S.NUMBER,
+      type: S.FLOAT,
     },
   },
   { sequelize: db, modelName: "month" }
