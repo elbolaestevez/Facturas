@@ -6,7 +6,7 @@ const invoiceRouter = Router();
 invoiceRouter.post("/create", InvoiceController.createInvoice);
 invoiceRouter.get("/", InvoiceController.findInvoices);
 invoiceRouter.get(
-  "/category/:nameCategory/:month",
+  "/category/:nameCategory/:month/:type",
   InvoiceController.findInvoicesCategoryPerMonth
 );
 

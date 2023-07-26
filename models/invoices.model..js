@@ -1,7 +1,11 @@
 const S = require("sequelize");
 const db = require("../db");
 
-class Invoice extends S.Model {}
+class Invoice extends S.Model {
+  get mes() {
+    return this.paymentdate.getMonth() + 1;
+  }
+}
 
 Invoice.init(
   {
@@ -32,7 +36,7 @@ Invoice.init(
       type: S.FLOAT,
     },
   },
-  { sequelize: db, modelName: "invoice" }
+  { sequelize: db, modelName: "invoice", getters: true }
 );
 
 module.exports = Invoice;

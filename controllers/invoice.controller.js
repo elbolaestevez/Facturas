@@ -10,11 +10,8 @@ class InvoiceController {
       const month = parseInt(paymentdate.split("-")[1], 10); // Extracts the month from the paymentdate (e.g., "07" for "2023-07-25")
 
       const invoice = await Invoice.create(req.body);
-      console.log("month", month);
 
-      // Find the Month instance where the month matches the extracted month
       const findMonth = await Month.findOne({ where: { month } });
-      console.log("findmonth", findMonth);
 
       if (invoice.type === "Transferencia") {
         findMonth.creditcardexpenses = findMonth.creditcardexpenses + total;
@@ -41,28 +38,43 @@ class InvoiceController {
   }
   static async findInvoicesCategoryPerMonth(req, res) {
     try {
-      console.log("holaa");
-      const { nameCategory, month } = req.params;
+      const { nameCategory, month, type } = req.params;
       const monthNumberParam = functionmonth(month);
-      console.log("monthNumberParam", monthNumberParam);
 
+      if (type == "null") {
+        const invoices = await Invoice.findAll({
+          where: {
+            category: nameCategory,
+          },
+        });
+        const invoicesForMonth = invoices.filter((invoice) => {
+          return invoice.mes === monthNumberParam;
+        });
+
+        return res.status(200).send(invoicesForMonth);
+      } else if (nameCategory == "null") {
+        const invoices = await Invoice.findAll({
+          where: {
+            type: type,
+          },
+        });
+        const invoicesForMonth = invoices.filter((invoice) => {
+          return invoice.mes === monthNumberParam;
+        });
+        return res.status(200).send(invoicesForMonth);
+      }
       const invoices = await Invoice.findAll({
         where: {
-          name: nameCategory,
-          paymentDate: {
-            [Op.and]: [
-              Sequelize.where(
-                Sequelize.fn("MONTH", Sequelize.col("paymentDate")),
-                monthNumberParam
-              ),
-            ],
-          },
+          category: nameCategory,
+          type: type,
         },
       });
-
-      res.status(200).send(invoices);
+      const invoicesForMonth = invoices.filter((invoice) => {
+        return invoice.mes === monthNumberParam;
+      });
+      return res.status(200).send(invoicesForMonth);
     } catch (error) {
-      console.log(error);
+      console.log("error", error);
       res.sendStatus(500);
     }
   }
