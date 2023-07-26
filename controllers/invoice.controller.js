@@ -41,6 +41,14 @@ class InvoiceController {
       const { nameCategory, month, type } = req.params;
       const monthNumberParam = functionmonth(month);
 
+      if (type == "null" && nameCategory == "null") {
+        const invoices = await Invoice.findAll();
+        const invoicesForMonth = invoices.filter((invoice) => {
+          return invoice.mes === monthNumberParam;
+        });
+        return res.status(200).send(invoicesForMonth);
+      }
+
       if (type == "null") {
         const invoices = await Invoice.findAll({
           where: {
