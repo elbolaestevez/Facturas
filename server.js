@@ -8,6 +8,7 @@ require("dotenv").config();
 
 const db = require("./db/index");
 app.use(express.json());
+app.use(cors(["http://localhost:3000"]));
 
 app.use("/api", router);
 
