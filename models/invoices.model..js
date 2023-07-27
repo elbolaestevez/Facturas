@@ -26,9 +26,6 @@ Invoice.init(
     montoSinIva: {
       type: S.FLOAT,
     },
-    ivaMonto: {
-      type: S.FLOAT,
-    },
     detail: {
       type: S.TEXT,
     },
