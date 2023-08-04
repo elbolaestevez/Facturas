@@ -13,7 +13,7 @@ app.use(cors(["http://localhost:3000"]));
 app.use("/api", router);
 
 db.sync({ force: false }).then(() => {
-  app.listen(3001, () => {
-    console.log("server levantado en puerto 3001");
+  app.listen(3000, () => {
+    console.log("server levantado en puerto 3000");
   });
 });
