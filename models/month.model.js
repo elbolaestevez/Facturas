@@ -17,7 +17,9 @@ Month.init(
     initialcash: {
       type: S.FLOAT,
     },
-
+    iva: {
+      type: S.FLOAT,
+    },
     finalcash: {
       type: S.FLOAT,
     },

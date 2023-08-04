@@ -19,6 +19,21 @@ class MonthController {
       res.sendStatus(500);
     }
   }
+
+  static async findmonth(req, res) {
+    try {
+      const month = req.params.month;
+      const foundMonth = await Month.findOne({ where: { month } });
+
+      if (!foundMonth) {
+        return res.sendStatus(404);
+      }
+      res.status(201).send(foundMonth);
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(500);
+    }
+  }
 }
 
 module.exports = MonthController;
