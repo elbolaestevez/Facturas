@@ -26,6 +26,9 @@ Month.init(
     bankcash: {
       type: S.FLOAT,
     },
+    year: {
+      type: S.INTEGER,
+    },
   },
   { sequelize: db, modelName: "month" }
 );

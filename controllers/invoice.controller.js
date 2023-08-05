@@ -9,18 +9,20 @@ class InvoiceController {
         req.body;
       console.log("totalapi", total);
 
-      const month = parseInt(paymentdate.split("-")[1], 10); // Extracts the month from the paymentdate (e.g., "07" for "2023-07-25")
+      const month = parseInt(paymentdate.split("-")[1], 10);
+      const year = parseInt(paymentdate.split("-")[0], 10);
+      console.log("year", year); // Extracts the month from the paymentdate (e.g., "07" for "2023-07-25")
 
       const invoice = await Invoice.create(req.body);
 
-      const findMonth = await Month.findOne({ where: { month } });
+      const findMonth = await Month.findOne({ where: { month, year } });
 
       if (invoice.type === "Transferencia") {
         findMonth.creditcardexpenses = findMonth.creditcardexpenses + total;
       } else if (invoice.type === "Efectivo") {
         findMonth.cashexpenses = findMonth.cashexpenses + total;
       }
-      findMonth.iva = findMonth.iva + (ivaAlicuota * montoSinIva);
+      findMonth.iva = findMonth.iva + ivaAlicuota * montoSinIva;
       findMonth.save();
 
       res.status(201).send({ invoice, findMonth });
@@ -31,9 +33,17 @@ class InvoiceController {
   }
   static async findInvoices(req, res) {
     try {
-      const invoices = await Invoice.findAll();
+      const year = req.params.year;
 
-      const invoicesWithMes = invoices.map((invoice) => {
+      const invoices = await Invoice.findAll();
+      console.log("invoices", invoices);
+
+      const filteredInvoices = invoices.filter((invoice) => {
+        const invoiceYear = new Date(invoice.paymentdate).getFullYear();
+        return invoiceYear.toString() === year; // Convertimos el year a string antes de comparar
+      });
+
+      const invoicesWithMes = filteredInvoices.map((invoice) => {
         const {
           id,
           paymentdate,

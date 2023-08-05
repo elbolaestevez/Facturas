@@ -23,7 +23,9 @@ class MonthController {
   static async findmonth(req, res) {
     try {
       const month = req.params.month;
-      const foundMonth = await Month.findOne({ where: { month } });
+      const year = req.params.year;
+      
+      const foundMonth = await Month.findOne({ where: { month, year } });
 
       if (!foundMonth) {
         return res.sendStatus(404);
