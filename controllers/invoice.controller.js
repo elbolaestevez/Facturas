@@ -5,13 +5,11 @@ const { Op, Sequelize } = require("sequelize");
 class InvoiceController {
   static async createInvoice(req, res) {
     try {
-      const { paymentdate, category, ivaAlicuota, detail, total, montoSinIva } =
-        req.body;
-      console.log("totalapi", total);
+      const { paymentdate, ivaAlicuota, total, montoSinIva } = req.body;
 
       const month = parseInt(paymentdate.split("-")[1], 10);
       const year = parseInt(paymentdate.split("-")[0], 10);
-      console.log("year", year); // Extracts the month from the paymentdate (e.g., "07" for "2023-07-25")
+      // Extracts the month from the paymentdate (e.g., "07" for "2023-07-25")
 
       const invoice = await Invoice.create(req.body);
 
@@ -36,7 +34,6 @@ class InvoiceController {
       const year = req.params.year;
 
       const invoices = await Invoice.findAll();
-      console.log("invoices", invoices);
 
       const filteredInvoices = invoices.filter((invoice) => {
         const invoiceYear = new Date(invoice.paymentdate).getFullYear();
