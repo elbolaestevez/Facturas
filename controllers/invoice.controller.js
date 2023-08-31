@@ -14,6 +14,7 @@ class InvoiceController {
       const invoice = await Invoice.create(req.body);
 
       const findMonth = await Month.findOne({ where: { month, year } });
+      console.log("invoice", invoice);
 
       if (invoice.type === "Transferencia") {
         findMonth.creditcardexpenses = findMonth.creditcardexpenses + total;
@@ -122,6 +123,43 @@ class InvoiceController {
     } catch (error) {
       console.log("error", error);
       res.sendStatus(500);
+    }
+  }
+  static async deleteInvoice(req, res) {
+    const id = req.params.id;
+
+    try {
+      const invoiceToDelete = await Invoice.findOne({
+        where: { id: id },
+      });
+      console.log("invoiceDelete", invoiceToDelete);
+      if (!invoiceToDelete) {
+        return res.status(404).json({ message: "Invoice not found" });
+      }
+
+      const date = new Date(invoiceToDelete.paymentdate);
+      const year = date.getFullYear().toString(); // Obtener el año y convertirlo a cadena
+
+      const month = (date.getMonth() + 1).toString();
+      console.log("month", month, year);
+
+      const findMonth = await Month.findOne({ where: { month, year } });
+
+      if (invoiceToDelete.type === "Transferencia") {
+        findMonth.creditcardexpenses =
+          findMonth.creditcardexpenses - invoiceToDelete.total;
+      } else if (invoiceToDelete.type === "Efectivo") {
+        findMonth.cashexpenses = findMonth.cashexpenses - invoiceToDelete.total;
+      }
+      findMonth.iva =
+        findMonth.iva - (invoiceToDelete.total - invoiceToDelete.montoSinIva);
+      findMonth.save();
+
+      await invoiceToDelete.destroy();
+
+      return res.status(204).send("nada"); // Devuelve una respuesta exitosa sin contenido
+    } catch (error) {
+      console.log("error", error);
     }
   }
 }

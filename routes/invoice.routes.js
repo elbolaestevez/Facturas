@@ -9,5 +9,6 @@ invoiceRouter.get(
   "/category/:nameCategory/:month/:type",
   InvoiceController.findInvoicesCategoryPerMonth
 );
+invoiceRouter.delete("/:id", InvoiceController.deleteInvoice);
 
 module.exports = invoiceRouter;
