@@ -20,7 +20,7 @@ class InvoiceController {
       } else if (invoice.type === "Efectivo") {
         findMonth.cashexpenses = findMonth.cashexpenses + total;
       }
-      findMonth.iva = findMonth.iva + ivaAlicuota * montoSinIva;
+      findMonth.iva = findMonth.iva + total - montoSinIva;
       findMonth.save();
 
       res.status(201).send({ invoice, findMonth });
