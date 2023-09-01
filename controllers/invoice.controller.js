@@ -83,7 +83,7 @@ class InvoiceController {
       if (type == "null" && nameCategory == "null") {
         const invoices = await Invoice.findAll();
         const invoicesForMonth = invoices.filter((invoice) => {
-          return invoice.mes === monthNumberParam;
+          return invoice.mes == monthNumberParam;
         });
         return res.status(200).send(invoicesForMonth);
       }
@@ -132,16 +132,16 @@ class InvoiceController {
       const invoiceToDelete = await Invoice.findOne({
         where: { id: id },
       });
-      console.log("invoiceDelete", invoiceToDelete);
       if (!invoiceToDelete) {
         return res.status(404).json({ message: "Invoice not found" });
       }
-
+      const isoStringMonth = this.paymentdate.toISOString();
+      const month = parseInt(
+        isoString.charAt(5) + isoStringMonth.charAt(6),
+        10
+      ).toString();
       const date = new Date(invoiceToDelete.paymentdate);
       const year = date.getFullYear().toString(); // Obtener el año y convertirlo a cadena
-
-      const month = (date.getMonth() + 1).toString();
-      console.log("month", month, year);
 
       const findMonth = await Month.findOne({ where: { month, year } });
 

@@ -3,7 +3,13 @@ const db = require("../db");
 
 class Invoice extends S.Model {
   get mes() {
-    return this.paymentdate.getMonth() + 1;
+    const isoString = this.paymentdate.toISOString();
+    const month = parseInt(
+      isoString.charAt(5) + isoString.charAt(6),
+      10
+    ).toString();
+
+    return month;
   }
 }
 
