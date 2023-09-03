@@ -135,9 +135,9 @@ class InvoiceController {
       if (!invoiceToDelete) {
         return res.status(404).json({ message: "Invoice not found" });
       }
-      const isoStringMonth = this.paymentdate.toISOString();
+      const isoStringMonth = invoiceToDelete.paymentdate.toISOString();
       const month = parseInt(
-        isoString.charAt(5) + isoStringMonth.charAt(6),
+        isoStringMonth.charAt(5) + isoStringMonth.charAt(6),
         10
       ).toString();
       const date = new Date(invoiceToDelete.paymentdate);
