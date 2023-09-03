@@ -78,6 +78,7 @@ class InvoiceController {
   static async findInvoicesCategoryPerMonth(req, res) {
     try {
       const { nameCategory, month, type } = req.params;
+      console.log("params", nameCategory, month, type);
       const monthNumberParam = functionmonth(month);
 
       if (type == "null" && nameCategory == "null") {
@@ -94,10 +95,12 @@ class InvoiceController {
             category: nameCategory,
           },
         });
+        console.log("Julio", invoices);
         const invoicesForMonth = invoices.filter((invoice) => {
-          return invoice.mes === monthNumberParam;
+          console.log("invoice", invoice.mes, monthNumberParam);
+          return invoice.mes == monthNumberParam;
         });
-
+        console.log("invoicesforMONTH", invoicesForMonth);
         return res.status(200).send(invoicesForMonth);
       } else if (nameCategory == "null") {
         const invoices = await Invoice.findAll({
@@ -106,7 +109,7 @@ class InvoiceController {
           },
         });
         const invoicesForMonth = invoices.filter((invoice) => {
-          return invoice.mes === monthNumberParam;
+          return invoice.mes == monthNumberParam;
         });
         return res.status(200).send(invoicesForMonth);
       }
@@ -117,7 +120,7 @@ class InvoiceController {
         },
       });
       const invoicesForMonth = invoices.filter((invoice) => {
-        return invoice.mes === monthNumberParam;
+        return invoice.mes == monthNumberParam;
       });
       return res.status(200).send(invoicesForMonth);
     } catch (error) {
