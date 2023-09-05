@@ -54,6 +54,9 @@ class InvoiceController {
         } = invoice;
 
         const mes = invoice.mes;
+        const montoSinIvaRedondeado = parseFloat(montoSinIva).toFixed(2);
+        const totalRedondeado = parseFloat(Math.round(total));
+        console.log("total", totalRedondeado);
 
         return {
           id,
@@ -61,9 +64,10 @@ class InvoiceController {
           category,
           type,
           ivaAlicuota,
-          montoSinIva,
+          montoSinIva: montoSinIvaRedondeado,
+
           detail,
-          total,
+          total: totalRedondeado,
           mes,
         };
       });
@@ -82,7 +86,9 @@ class InvoiceController {
       const monthNumberParam = functionmonth(month);
 
       if (type == "null" && nameCategory == "null") {
-        const invoices = await Invoice.findAll();
+        const invoices = await Invoice.findAll({
+          order: [["paymentdate", "Desc"]],
+        });
         const invoicesForMonth = invoices.filter((invoice) => {
           return invoice.mes == monthNumberParam;
         });
@@ -94,6 +100,7 @@ class InvoiceController {
           where: {
             category: nameCategory,
           },
+          order: [["paymentdate", "Desc"]],
         });
         console.log("Julio", invoices);
         const invoicesForMonth = invoices.filter((invoice) => {
@@ -107,6 +114,7 @@ class InvoiceController {
           where: {
             type: type,
           },
+          order: [["paymentdate", "Desc"]],
         });
         const invoicesForMonth = invoices.filter((invoice) => {
           return invoice.mes == monthNumberParam;
@@ -118,6 +126,7 @@ class InvoiceController {
           category: nameCategory,
           type: type,
         },
+        order: [["paymentdate", "Desc"]],
       });
       const invoicesForMonth = invoices.filter((invoice) => {
         return invoice.mes == monthNumberParam;
